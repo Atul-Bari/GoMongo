@@ -1,3 +1,4 @@
+//mongodb://localhost:27017
 > show dbs
 
 >use testdb
