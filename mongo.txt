@@ -1,0 +1,90 @@
+> show dbs
+
+>use testdb
+
+>db.createCollection("atul")
+
+>show dbs //after creating createCollection it will show in db list
+
+//delete db demo
+>use tpdb
+
+>db //to get current working db
+
+// delete db
+>db.dropDatabase()
+
+>show db
+
+>use testdb
+
+>db.atul.drop()
+
+>show collections
+
+>db.atul.insertOne({"name":"atul", "designation":"developer"})
+
+>db.atul.insertmany([{"name":"atul", "designation":"developer"},{"name":"atul", "designation":"developer"}])
+
+>db.atul.find() // will find all entries
+
+>db.atul.find().pretty()
+
+>db.atul.insert({}) //can insert with--> insertOne, insertmany, insert
+
+>db.atul.find({name: {$eq: "vinod"}}, {class:0, _id:0})
+
+>db.atul.updateOne({_id:2}, {$set: {age:34}})
+
+>db.atul.deleteOne({_id:4})
+
+>db.atul.find({},{_id:0, "status":1})
+
+// sort
+>db.mycol.find({},{"title":1,_id:0}).sort({"title":-1})
+
+More cool things:
+>db.purchase_orders.count({product: "toothbrush"}) //count({...})
+
+>db.purchase_orders.distinct("product") //distinct("..")
+
+//Amount of money spent by each customer
+>db.purchase_orders.aggregate(
+    [
+        {$match: {} },
+        {$group: {_id: "$customer", total: {$sum: "$total"}}}
+    ]
+)
+
+>db.purchase_orders.aggregate(
+    [
+        {$match: {} },
+        {$group: {_id: "$customer", total: {$sum: "$total"}}},
+        {$sort: {total: -1}}
+    ]
+)
+
+>db.purchase_orders.aggregate(
+    [
+        {$match: { customer: {$in: ["mike","atul"]}} },
+        {$group: {_id: "$customer", total: {$sum: "$total"}}},
+        {$sort: {total: -1}}
+    ]
+)
+
+
+syntax:
+    {<key>:{$lt:<value>}}
+
+
+Indexing:
+
+>db,collection.createIndex({name: "text", description: "text"})
+
+>db.collection.find({$text: {$search: "coffee"}},
+                    {score: {$meta: "testScore"}}).sort({score: {$meta: "textScore"}})
+
+
+//group class by marks between 30 - 50
+db.s1.aggregate([{$match: {$and: [{Marks: {$gt:30}},{Marks:{$lt: 50}}]}}, {$group: {_id: "$Class", total: {$sum:"$Marks"}}},{$sort: {_id:-1}}])
+
